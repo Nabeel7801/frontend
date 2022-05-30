@@ -4,10 +4,6 @@ import * as $ from 'jquery';
 import BoxHeader from '../components/BoxHeader';
 import CustomTable from '../components/CustomTable';
 
-const rows = [
-    {id: "0001", bookName: "Harry Potter", author: "JJ", borrowedBy: "Nabeel", dateOfBorrow: "23/11/2021", dateOfReturn: "23/05/2022"}
-];
-
 function BookList(props) {
 
     const [books, setBooks] = useState([]);
@@ -15,7 +11,8 @@ function BookList(props) {
     useEffect(() => {
       $.get(`${props.BACKEND_URL}/getBooks`, function(data, status) {
         if (status === "success")
-          setBooks(data);
+            data.map(d => d.borrowedBy = d.first_name + " " + d.last_name);
+            setBooks(data);
       });
     }, [props.BACKEND_URL])
   
@@ -26,7 +23,7 @@ function BookList(props) {
                 <BoxHeader title="Books List" />
                 <CustomTable 
                     headers={["Book Name", "Author", "Borrowed By" , "Date of Borrow", "Date of Return"]}
-                    attributes={["bookName", "author", "borrowedBy" , "dateOfBorrow", "dateOfReturn"]}
+                    attributes={["book_name", "author", "borrowedBy" , "date_of_borrow", "date_of_return"]}
                     rows={books}
                     redirectLink="bookDetails"
                 />
